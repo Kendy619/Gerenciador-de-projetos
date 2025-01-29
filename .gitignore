@@ -1,0 +1,14 @@
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.log
+.idea/
+.vscode/
+*.iml
+mvnw
+mvnw.cmd
+node_modules/
+.env
+application.yml

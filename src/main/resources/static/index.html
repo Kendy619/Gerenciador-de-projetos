@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Projetos</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Gerenciamento de Projetos</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Adicionar Projeto</h2>
+            <form id="projetoForm">
+                <label for="nomeProjeto">Nome do Projeto:</label>
+                <input type="text" id="nomeProjeto" name="nome" placeholder="Digite o nome do projeto" required>
+
+                <label for="descricaoProjeto">Descrição:</label>
+                <textarea id="descricaoProjeto" name="descricao" placeholder="Digite a descrição" required></textarea>
+				
+				<label for="dataInicio">Data de Início:</label>
+				<input type="date" id="dataInicio" name="dataInicio" required>
+
+				<label for="dataTermino">Data de Término:</label>
+				<input type="date" id="dataTermino" name="dataTermino" required>
+				
+                <label for="statusProjeto">Status:</label>
+                <select id="statusProjeto" name="status">
+                    <option value="PLANEJADO">PLANEJADO</option>
+                    <option value="EM_EXECUCAO">EM_EXECUCAO</option>
+                    <option value="ABORTADO">ABORTADO</option>
+                    <option value="FINALIZADO">FINAIZADO</option>
+                </select>
+
+                <label for="equipeProjeto">Equipe Responsável:</label>
+                <select id="equipeProjeto" name="equipeResponsavel">
+                    <option value="ADMFIN">ADMFIN</option>
+                    <option value="ADMPLN">ADMPLN</option>
+                    <option value="ADMAPO">ADMAPO</option>
+                </select>
+
+                <button type="button" id="submitProjeto">Adicionar Projeto</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Adicionar Tarefa</h2>
+            <form id="tarefaForm">
+                <label for="tituloTarefa">Título da Tarefa:</label>
+                <input type="text" id="tituloTarefa" name="titulo" placeholder="Digite o título da tarefa" required>
+
+                <label for="descricaoTarefa">Descrição:</label>
+                <textarea id="descricaoTarefa" name="descricao" placeholder="Digite a descrição" required></textarea>
+				
+				<label for="prazoTarefa">Prazo (dias):</label>				
+				<input type="number" id="prazoTarefa" name="prazo" placeholder="Digite o prazo em dias">
+				
+                <label for="statusTarefa">Status:</label>
+                <select id="statusTarefa" name="status">
+                    <option value="PLANEJADO">PLANEJADO</option>
+                    <option value="EM_EXECUCAO">EM_EXECUCAO</option>
+                    <option value="ABORTADO">ABORTADO</option>
+                    <option value="FINALIZADO">FINALIZADO</option>
+                </select>
+
+                <label for="responsavelTarefa">Responsável:</label>
+                <select id="responsavelTarefa" name="responsavel">
+                    <option value="PLO">PLO</option>
+                    <option value="GFU">GFU</option>
+                    <option value="CTB">CTB</option>
+                    <option value="GBP">GBP</option>
+                </select>
+
+                <label for="projetoId">ID do Projeto:</label>
+                <input type="number" id="projetoId" name="projetoId" placeholder="Digite o ID do projeto" required>
+
+                <button type="button" id="submitTarefa">Adicionar Tarefa</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        // Adicionar Projeto
+        document.getElementById('submitProjeto').addEventListener('click', async () => {
+            const form = document.getElementById('projetoForm');
+            const formData = new FormData(form);
+
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            console.log(data);
+            const response = await fetch('/projetos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+                alert('Projeto adicionado com sucesso!');
+                form.reset();
+            } else {
+                alert('Erro ao adicionar o projeto.');
+            }
+        });
+
+        // Adicionar Tarefa
+        document.getElementById('submitTarefa').addEventListener('click', async () => {
+	    const form = document.getElementById('tarefaForm');
+	    const formData = new FormData(form);
+	
+	    const data = {
+	        titulo: formData.get('titulo'),
+	        descricao: formData.get('descricao'),
+	        prazo: Number(formData.get('prazo')),
+	        status: formData.get('status'),
+	        responsavel: formData.get('responsavel'),
+	        projetoId: Number(formData.get('projetoId'))
+	    };
+	
+	    const response = await fetch('/tarefas', {
+	        method: 'POST',
+	        headers: { 'Content-Type': 'application/json' },
+	        body: JSON.stringify(data)
+	    });
+
+            if (response.ok) {
+                alert('Tarefa adicionada com sucesso!');
+                form.reset();
+            } else {
+                alert('Erro ao adicionar a tarefa.');
+            }
+        });
+    </script>
+</body>
+</html>
+
