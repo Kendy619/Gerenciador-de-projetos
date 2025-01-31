@@ -14,7 +14,6 @@ public class ProjetoService {
     @Autowired
     private ProjetoRepository projetoRepository;
 
-    // Cria um novo projeto
     @Transactional
     public Projeto createProjeto(Projeto projeto) {
         if (projeto.getNome() == null || projeto.getNome().isEmpty()) {
@@ -23,18 +22,18 @@ public class ProjetoService {
         return projetoRepository.save(projeto);
     }
 
-    // Lista todos os projetos
+    
     public List<Projeto> getAllProjetos() {
         return projetoRepository.findAll();
     }
 
-    // Busca projeto por ID com tratamento de exceção específica
+    
     public Projeto getProjetoById(Long id) {
         return projetoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Projeto não encontrado com o ID: " + id));
     }
 
-    // Atualiza projeto com validação
+    
     @Transactional
     public Projeto updateProjeto(Long id, Projeto projetoDetails) {
         Projeto projetoExistente = getProjetoById(id);
@@ -48,7 +47,7 @@ public class ProjetoService {
         return projetoRepository.save(projetoExistente);
     }
 
-    // Deleta projeto
+  
     @Transactional
     public void deleteProjeto(Long id) {
         if (!projetoRepository.existsById(id)) {

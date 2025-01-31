@@ -18,8 +18,12 @@ public class ProjetoController {
 
     @PostMapping
     public ResponseEntity<Projeto> createProjeto(@RequestBody Projeto projeto) {
-        Projeto novoProjeto = projetoService.createProjeto(projeto);
-        return new ResponseEntity<>(novoProjeto, HttpStatus.CREATED);
+    	try {
+            Projeto novoProjeto = projetoService.createProjeto(projeto);
+            return new ResponseEntity<>(novoProjeto, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping

@@ -14,19 +14,18 @@ import java.util.List;
 @RequestMapping("/enums")
 public class EnumController {
 
-    // Endpoint para listar os valores do Enum Status
     @GetMapping("/status")
     public List<Status> getStatusValues() {
         return Arrays.asList(Status.values());
     }
 
-    // Endpoint para listar os valores do Enum Equipe
+ 
     @GetMapping("/equipes")
     public List<Equipe> getEquipeValues() {
         return Arrays.asList(Equipe.values());
     }
 
-    // Endpoint para listar os valores do Enum Responsavel
+   
     @GetMapping("/responsaveis")
     public List<Responsavel> getResponsavelValues() {
         return Arrays.asList(Responsavel.values());

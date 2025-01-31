@@ -14,17 +14,17 @@ public class TarefaService {
     @Autowired
     private TarefaRepository tarefaRepository;
 
-    // Criar uma nova tarefa
+   
     public Tarefa createTarefa(Tarefa tarefa) {
         return tarefaRepository.save(tarefa);
     }
 
-    // Listar todas as tarefas
+    
     public List<Tarefa> getAllTarefas() {
         return tarefaRepository.findAll();
     }
 
-    // Buscar uma tarefa por ID
+    
     public Tarefa getTarefaById(Long id) {
         Optional<Tarefa> tarefaOptional = tarefaRepository.findById(id);
         if (tarefaOptional.isPresent()) {
@@ -34,7 +34,7 @@ public class TarefaService {
         }
     }
 
-    // Atualizar uma tarefa existente
+   
     public Tarefa updateTarefa(Long id, Tarefa tarefaDetails) {
         Tarefa tarefaExistente = getTarefaById(id);
 
@@ -47,7 +47,7 @@ public class TarefaService {
         return tarefaRepository.save(tarefaExistente);
     }
 
-    // Deletar uma tarefa por ID
+
     public void deleteTarefa(Long id) {
         Tarefa tarefa = getTarefaById(id);
         tarefaRepository.delete(tarefa);
