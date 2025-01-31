@@ -47,6 +47,165 @@ async function loadTarefas() {
     }
 }
 
+async function editProjeto(id) {
+    try {
+		
+        const response = await fetch(`${API_URL}/projetos/${id}`);
+        if (!response.ok) {
+            throw new Error('Projeto não encontrado');
+        }
+        const projeto = await response.json();
+
+
+        const form = document.getElementById('projetoForm');
+        form.nome.value = projeto.nome;
+        form.descricao.value = projeto.descricao;
+        form.dataInicio.value = projeto.dataInicio;
+        form.dataTermino.value = projeto.dataTermino;
+        form.status.value = projeto.status;
+        form.equipeResponsavel.value = projeto.equipeResponsavel;
+
+
+        const submitBtn = document.getElementById('submitProjeto');
+        submitBtn.textContent = 'Atualizar Projeto';
+        
+
+        submitBtn.replaceWith(submitBtn.cloneNode(true));
+        const newSubmitBtn = document.getElementById('submitProjeto');
+        
+
+        newSubmitBtn.addEventListener('click', async () => {
+            try {
+                const formData = new FormData(form);
+                const data = {
+                    nome: formData.get('nome'),
+                    descricao: formData.get('descricao'),
+                    dataInicio: formData.get('dataInicio'),
+                    dataTermino: formData.get('dataTermino'),
+                    status: formData.get('status'),
+                    equipeResponsavel: formData.get('equipeResponsavel')
+                };
+
+                const updateResponse = await fetch(`${API_URL}/projetos/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!updateResponse.ok) {
+                    throw new Error('Falha ao atualizar projeto');
+                }
+
+                alert('Projeto atualizado com sucesso!');
+                form.reset();
+                newSubmitBtn.textContent = 'Adicionar Projeto';
+                loadProjetos();
+            } catch (error) {
+                alert(`Erro ao atualizar projeto: ${error.message}`);
+            }
+        });
+    } catch (error) {
+        alert(`Erro ao carregar projeto: ${error.message}`);
+    }
+}
+
+
+async function deleteProjeto(id) {
+    if (confirm('Tem certeza que deseja excluir este projeto?')) {
+        try {
+            const response = await fetch(`${API_URL}/projetos/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                throw new Error('Falha ao excluir projeto');
+            }
+
+            alert('Projeto excluído com sucesso!');
+            loadProjetos();
+        } catch (error) {
+            alert(`Erro ao excluir projeto: ${error.message}`);
+        }
+    }
+}
+
+async function editTarefa(id) {
+    try {
+
+        const response = await fetch(`${API_URL}/tarefas/${id}`);
+        if (!response.ok) {
+            throw new Error('Tarefa não encontrada');
+        }
+        const tarefa = await response.json();
+
+        const form = document.getElementById('tarefaForm');
+        form.titulo.value = tarefa.titulo;
+        form.descricao.value = tarefa.descricao;
+        form.prazo.value = tarefa.prazo;
+        form.status.value = tarefa.status;
+        form.responsavel.value = tarefa.responsavel;
+        form.projetoId.value = tarefa.projeto.id;
+
+        const submitBtn = document.getElementById('submitTarefa');
+        submitBtn.textContent = 'Atualizar Tarefa';
+
+        submitBtn.replaceWith(submitBtn.cloneNode(true));
+        const newSubmitBtn = document.getElementById('submitTarefa');
+
+        newSubmitBtn.addEventListener('click', async () => {
+            try {
+                const formData = new FormData(form);
+                const data = {
+                    titulo: formData.get('titulo'),
+                    descricao: formData.get('descricao'),
+                    prazo: Number(formData.get('prazo')),
+                    status: formData.get('status'),
+                    responsavel: formData.get('responsavel'),
+                    projetoId: Number(formData.get('projetoId'))
+                };
+
+                const updateResponse = await fetch(`${API_URL}/tarefas/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!updateResponse.ok) {
+                    throw new Error('Falha ao atualizar tarefa');
+                }
+
+                alert('Tarefa atualizada com sucesso!');
+                form.reset();
+                newSubmitBtn.textContent = 'Adicionar Tarefa';
+                loadTarefas();
+            } catch (error) {
+                alert(`Erro ao atualizar tarefa: ${error.message}`);
+            }
+        });
+    } catch (error) {
+        alert(`Erro ao carregar tarefa: ${error.message}`);
+    }
+}
+
+async function deleteTarefa(id) {
+    if (confirm('Tem certeza que deseja excluir esta tarefa?')) {
+        try {
+            const response = await fetch(`${API_URL}/tarefas/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                throw new Error('Falha ao excluir tarefa');
+            }
+
+            alert('Tarefa excluída com sucesso!');
+            loadTarefas();
+        } catch (error) {
+            alert(`Erro ao excluir tarefa: ${error.message}`);
+        }
+    }
+}
+
 document.getElementById('submitProjeto').addEventListener('click', async () => {
     try {
         const form = document.getElementById('projetoForm');
