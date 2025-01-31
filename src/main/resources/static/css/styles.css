@@ -61,6 +61,8 @@ form button:hover {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 10px;
+    transition: all 0.3s ease;
+    position: relative;
 }
 
 .actions {
@@ -150,4 +152,46 @@ form button:hover {
     margin-top: 20px;
     padding-left: 15px;
     border-left: 2px solid #ccc;
+}
+
+.card.deleting {
+    transform: scale(0);
+    opacity: 0;
+}
+
+.tarefas ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.tarefas li {
+    padding: 10px;
+    margin: 5px 0;
+    background: #f8f9fa;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+projeto-id {
+    background: #007bff;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.projeto-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.status-info {
+    margin-top: 8px;
+    font-size: 0.9em;
 }
