@@ -84,3 +84,70 @@ form button:hover {
     background-color: #e74c3c;
     color: white;
 }
+
+.projeto-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 15px;
+    padding: 15px;
+    position: relative;
+}
+
+.projeto-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.tarefas-container {
+    margin-top: 10px;
+    padding-left: 20px;
+    border-left: 3px solid #007BFF;
+}
+
+.tarefa-card {
+    background: #f8f9fa;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.PLANEJADO { background-color: #ffd700; }
+.EM_EXECUCAO { background-color: #90EE90; }
+.ABORTADO { background-color: #ff6961; }
+.FINALIZADO { background-color: #778899; }
+
+@media (max-width: 768px) {
+    main {
+        margin: 10px;
+        padding: 10px;
+    }
+    
+    .projeto-card {
+        padding: 10px;
+    }
+}
+
+.card .actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.card .tarefas {
+    margin-top: 20px;
+    padding-left: 15px;
+    border-left: 2px solid #ccc;
+}

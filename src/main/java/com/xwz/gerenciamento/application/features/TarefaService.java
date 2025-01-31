@@ -46,7 +46,10 @@ public class TarefaService {
 
         return tarefaRepository.save(tarefaExistente);
     }
-
+    
+    public List<Tarefa> getTarefasPorProjeto(Long projetoId) {
+        return tarefaRepository.findByProjeto_Id(projetoId);
+    }
 
     public void deleteTarefa(Long id) {
         Tarefa tarefa = getTarefaById(id);

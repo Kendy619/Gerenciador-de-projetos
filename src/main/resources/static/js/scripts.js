@@ -1,5 +1,23 @@
 const API_URL = 'http://localhost:8080';
 
+async function loadProjetosComTarefas() {
+    try {
+        const projetosResponse = await fetch(`${API_URL}/projetos`);
+        const projetos = await projetosResponse.json();
+
+        const projetosComTarefas = await Promise.all(projetos.map(async (projeto) => {
+            const tarefasResponse = await fetch(`${API_URL}/tarefas?projetoId=${projeto.id}`);
+            const tarefas = await tarefasResponse.json();
+            return { ...projeto, tarefas };
+        }));
+
+        renderizarProjetos(projetosComTarefas);
+    } catch (error) {
+        alert(`Erro ao carregar dados: ${error.message}`);
+    }
+}
+
+
 async function loadProjetos() {
     try {
         const response = await fetch(`${API_URL}/projetos`);
@@ -18,12 +36,24 @@ async function loadProjetos() {
                     <button class="btn-edit" onclick="editProjeto(${projeto.id})">Editar</button>
                     <button class="btn-delete" onclick="deleteProjeto(${projeto.id})">Excluir</button>
                 </div>
+                <div class="tarefas">
+                    <h4>Tarefas</h4>
+                    <ul>
+                        ${projeto.tarefas.map(tarefa => `
+                            <li>
+                                <strong>${tarefa.titulo}</strong> - ${tarefa.descricao}
+                                <span class="status">${tarefa.status}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
             </div>
         `).join('');
     } catch (error) {
         alert(`Falha ao carregar projetos: ${error.message}`);
     }
 }
+
 
 async function loadTarefas() {
     try {
@@ -206,6 +236,46 @@ async function deleteTarefa(id) {
     }
 }
 
+
+function renderizarProjetos(projetosComTarefas) {
+    const container = document.getElementById('projetosList');
+    container.innerHTML = projetosComTarefas.map(projeto => `
+        <div class="card">
+            <h3>${projeto.nome}</h3>
+            <p>${projeto.descricao}</p>
+            <p>Status: ${projeto.status}</p>
+            <div class="actions">
+                <!-- Botões para editar e excluir o projeto -->
+                <button class="btn-edit" onclick="editProjeto(${projeto.id})">✏️</button>
+                <button class="btn-delete" onclick="deleteProjeto(${projeto.id})">🗑️</button>
+            </div>
+            <div class="tarefas">
+                <h4>Tarefas</h4>
+                <ul>
+                    ${projeto.tarefas.map(tarefa => `
+                        <li>
+                            <strong>${tarefa.titulo}</strong> - ${tarefa.descricao}
+                            <span class="status">${tarefa.status}</span>
+                            <div class="actions">
+                                <!-- Botões para editar e excluir a tarefa -->
+                                <button class="btn-edit" onclick="editTarefa(${tarefa.id})">✏️</button>
+                                <button class="btn-delete" onclick="deleteTarefa(${tarefa.id})">🗑️</button>
+                            </div>
+                        </li>
+                    `).join('')}
+                </ul>
+            </div>
+        </div>
+    `).join('');
+}
+
+function toggleTarefas(projetoId) {
+    const tarefasContainer = document.getElementById(`tarefas-${projetoId}`);
+    const headerIcon = tarefasContainer.previousElementSibling.querySelector('span');
+    tarefasContainer.classList.toggle('show');
+    headerIcon.textContent = tarefasContainer.classList.contains('show') ? '▼' : '▶';
+}
+
 document.getElementById('submitProjeto').addEventListener('click', async () => {
     try {
         const form = document.getElementById('projetoForm');
@@ -273,6 +343,6 @@ document.getElementById('submitTarefa').addEventListener('click', async () => {
 });
 
 window.onload = () => {
-    loadProjetos();
+    loadProjetosComTarefas();
     loadTarefas();
 };

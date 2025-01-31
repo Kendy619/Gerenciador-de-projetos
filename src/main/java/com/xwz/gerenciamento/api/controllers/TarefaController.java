@@ -47,9 +47,11 @@ public class TarefaController {
     }	
 
     @GetMapping
-    public ResponseEntity<List<Tarefa>> getAllTarefas() {
-        List<Tarefa> tarefas = tarefaService.getAllTarefas();
-        return new ResponseEntity<>(tarefas, HttpStatus.OK);
+    public ResponseEntity<List<Tarefa>> getAllTarefas(@RequestParam(required = false) Long projetoId) {
+    	if (projetoId != null) {
+            return new ResponseEntity<>(tarefaService.getTarefasPorProjeto(projetoId), HttpStatus.OK);
+        }
+    	return new ResponseEntity<>(tarefaService.getAllTarefas(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
