@@ -8,4 +8,5 @@ public class TarefaUpdateDTO {
 	 private String descricao;
 	 private Integer prazo;
 	 private String status;
+	 private String responsavel;
 }

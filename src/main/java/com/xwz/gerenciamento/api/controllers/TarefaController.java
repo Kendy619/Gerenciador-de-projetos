@@ -66,9 +66,12 @@ public class TarefaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Tarefa> updateTarefa(@PathVariable Long id, @RequestBody TarefaUpdateDTO tarefaUpdateDTO) {
+    public ResponseEntity<Tarefa> updateTarefa(
+        @PathVariable Long id,
+        @RequestBody TarefaUpdateDTO tarefaUpdateDTO
+    ) {
         Tarefa tarefaExistente = tarefaService.getTarefaById(id);
-       
+
         if (tarefaUpdateDTO.getTitulo() != null) {
             tarefaExistente.setTitulo(tarefaUpdateDTO.getTitulo());
         }
@@ -81,7 +84,10 @@ public class TarefaController {
         if (tarefaUpdateDTO.getStatus() != null) {
             tarefaExistente.setStatus(Status.valueOf(tarefaUpdateDTO.getStatus()));
         }
-        
+        if (tarefaUpdateDTO.getResponsavel() != null) {
+            tarefaExistente.setResponsavel(Responsavel.valueOf(tarefaUpdateDTO.getResponsavel()));
+        }
+
         Tarefa updatedTarefa = tarefaService.updateTarefa(id, tarefaExistente);
         return new ResponseEntity<>(updatedTarefa, HttpStatus.OK);
     }

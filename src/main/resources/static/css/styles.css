@@ -97,10 +97,14 @@ form button:hover {
 }
 
 .projeto-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
+    background: #007bff;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin-left: 10px;
+    vertical-align: middle;
+    display: inline-block;
 }
 
 .tarefas-container {
@@ -120,17 +124,43 @@ form button:hover {
 }
 
 .status-badge {
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 0.8em;
-    font-weight: bold;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-left: 8px;
 }
 
-.PLANEJADO { background-color: #ffd700; }
-.EM_EXECUCAO { background-color: #90EE90; }
-.ABORTADO { background-color: #ff6961; }
-.FINALIZADO { background-color: #778899; }
+.tarefas .status-badge {
+    font-size: 0.75em;
+}
 
+.status-badge.planejado { background-color: #ffd700; } 
+.status-badge.em-execucao { background-color: #28a745; } 
+.status-badge.abortado { background-color: #dc3545; } 
+.status-badge.finalizado { background-color: #6c757d; }
+
+.PLANEJADO { 
+    background-color: #fff3cd; 
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+.EM_EXECUCAO { 
+    background-color: #d4edda; 
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+.ABORTADO { 
+    background-color: #f8d7da; 
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+.FINALIZADO { 
+    background-color: #d6d8d9; 
+    color: #1b1e21;
+    border: 1px solid #c6c8ca;
+}
 @media (max-width: 768px) {
     main {
         margin: 10px;
@@ -155,8 +185,8 @@ form button:hover {
 }
 
 .card.deleting {
-    transform: scale(0);
     opacity: 0;
+    transition: opacity 0.5s ease-out;
 }
 
 .tarefas ul {
@@ -174,7 +204,7 @@ form button:hover {
     align-items: center;
 }
 
-projeto-id {
+.projeto-id {
     background: #007bff;
     color: white;
     padding: 3px 8px;
@@ -194,4 +224,46 @@ projeto-id {
 .status-info {
     margin-top: 8px;
     font-size: 0.9em;
+}
+
+.prazo-container {
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.prazo-label {
+    font-weight: 600;
+    color: #555;
+}
+
+.prazo-value {
+    background: #e3f2fd;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.prazo-value.urgente {
+    .prazo-value.urgente {
+    background: #ffebee;
+    color: #d32f2f;
+    animation: pulse 1.5s infinite ease-in-out;
+	}
+}
+
+.projeto-info {
+    flex-grow: 1;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.prazo-container::before {
+    content: "⏳";
+    margin-right: 4px;
 }
