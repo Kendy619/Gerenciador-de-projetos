@@ -43,6 +43,7 @@ public class TarefaService {
         tarefaExistente.setStatus(tarefaDetails.getStatus());
         tarefaExistente.setPrazo(tarefaDetails.getPrazo());
         tarefaExistente.setProjeto(tarefaDetails.getProjeto());
+        tarefaExistente.setResponsavel(tarefaDetails.getResponsavel());
 
         return tarefaRepository.save(tarefaExistente);
     }

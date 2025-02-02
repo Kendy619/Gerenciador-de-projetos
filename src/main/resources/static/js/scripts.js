@@ -8,7 +8,7 @@ async function loadProjetosComTarefas() {
 		const projetosComTarefas = await Promise.all(projetos.map(async (projeto) => {
 			const tarefasResponse = await fetch(`${API_URL}/tarefas?projetoId=${projeto.id}`);
 			const tarefas = await tarefasResponse.json();
-			return { ...projeto, tarefas }; // Correção na estrutura do objeto
+			return { ...projeto, tarefas };
 		}));
 
 		renderizarProjetos(projetosComTarefas);
@@ -28,8 +28,14 @@ async function loadTarefas() {
             <div class="card" id="tarefa-global-${tarefa.id}">
                 <h3>${tarefa.titulo}</h3>
                 <p>${tarefa.descricao}</p>
-                <p>Prazo: ${tarefa.prazo} dias</p>
-                <p>Status: ${tarefa.status}</p>
+				<div class="prazo-container">
+				    <span class="prazo-label">Prazo:</span>
+				    <span class="prazo-value ${tarefa.prazo <= 3 ? 'urgente' : ''}">
+				    ${tarefa.prazo ? tarefa.prazo + ' dias' : 'Sem prazo'}
+					</span>
+				</div>
+				<p>Status: <span class="status-badge ${tarefa.status}">${tarefa.status}</span></p>
+				<p>Responsável: <span class="responsavel-badge">${tarefa.responsavel}</span></p>
                 <div class="actions">
                     <button class="btn-edit" onclick="editTarefa(${tarefa.id})">✏️</button>
                     <button class="btn-delete" onclick="deleteTarefa(${tarefa.id})">🗑️</button>
@@ -328,16 +334,19 @@ function criarCardProjeto(projeto) {
 }
 
 function criarItemTarefa(tarefa) {
-	return `
+    return `
         <li id="tarefa-${tarefa.id}">
             <strong>${tarefa.titulo}</strong> - ${tarefa.descricao}
-			<div class="prazo-container">
-			<span class="prazo-label">Prazo:</span>
-			               <span class="prazo-value ${tarefa.prazo <= 3 ? 'urgente' : ''}">
-			               ${tarefa.prazo} dias
-		 	</span>
-			</div>
-            <p>Status: <span class="status-badge ${statusFormatado}">${tarefa.status}</span></p>
+            <div class="prazo-container">
+                <span class="prazo-label">Prazo:</span>
+                <span class="prazo-value ${tarefa.prazo <= 3 ? 'urgente' : ''}">
+                    ${tarefa.prazo} dias
+                </span>
+            </div>
+			
+            <p>Status: <span class="status-badge ${tarefa.status}">${tarefa.status}</span></p>
+			<p>Responsável: <span class="responsavel-badge">${tarefa.responsavel}</span></p>
+			
             <div class="actions">
                 <button class="btn-edit" onclick="editTarefa(${tarefa.id})">✏️</button>
                 <button class="btn-delete" onclick="deleteTarefa(${tarefa.id})">🗑️</button>
@@ -386,6 +395,7 @@ function renderizarProjetos(projetosComTarefas) {
                         <li id="tarefa-${tarefa.id}">
                             <strong>${tarefa.titulo}</strong> - ${tarefa.descricao}
                             <span class="status-badge ${tarefa.status}">${tarefa.status}</span>
+							<span class="status-badge ${tarefa.responsavel}">${tarefa.responsavel}</span>
                             <div class="actions">
                                 <button class="btn-edit" onclick="editTarefa(${tarefa.id})">✏️</button>
                                 <button class="btn-delete" onclick="deleteTarefa(${tarefa.id})">🗑️</button>
@@ -433,50 +443,48 @@ document.getElementById('submitProjeto').addEventListener('click', async () => {
 });
 
 document.getElementById('submitTarefa').addEventListener('click', async () => {
-	try {
-		const form = document.getElementById('tarefaForm');
-		const formData = new FormData(form);
+    try {
+        const form = document.getElementById('tarefaForm');
+        const formData = new FormData(form);
 
-		const response = await fetch(`${API_URL}/tarefas`, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				titulo: formData.get('titulo'),
-				descricao: formData.get('descricao'),
-				prazo: Number(formData.get('prazo')),
-				status: formData.get('status'),
-				responsavel: formData.get('responsavel'),
-				projetoId: Number(formData.get('projetoId'))
-			})
-		});
+        const response = await fetch(`${API_URL}/tarefas`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                titulo: formData.get('titulo'),
+                descricao: formData.get('descricao'),
+                prazo: Number(formData.get('prazo')),
+                status: formData.get('status'),
+                responsavel: formData.get('responsavel'),
+                projetoId: Number(formData.get('projetoId'))
+            })
+        });
 
-		if (!response.ok) throw new Error('Erro ao adicionar tarefa');
+        if (!response.ok) throw new Error('Erro ao adicionar tarefa');
 
-		const novaTarefa = await response.json();
+        const novaTarefa = await response.json();
 
-		const projetoId = novaTarefa.projetoId;
+        // Correção: usar projetoId diretamente
+        const projetoId = novaTarefa.projetoId; 
 
-		if (!novaTarefa.projeto || !novaTarefa.projeto.id) {
-			throw new Error('Projeto não encontrado na resposta da API');
-		}
+        const projetoContainer = document.querySelector(`#projeto-${projetoId} .tarefas ul`);
+        if (projetoContainer) {
+            projetoContainer.insertAdjacentHTML('beforeend', criarItemTarefa(novaTarefa));
+        }
 
-		const projetoContainer = document.querySelector(`#projeto-${novaTarefa.projeto.id} .tarefas ul`);
-		if (projetoContainer) {
-			projetoContainer.insertAdjacentHTML('beforeend', criarItemTarefa(novaTarefa));
-		}
-
-		const containerTarefas = document.getElementById('tarefasList');
-		containerTarefas.insertAdjacentHTML('afterbegin', `
+        // Atualizar lista geral de tarefas
+        const containerTarefas = document.getElementById('tarefasList');
+        containerTarefas.insertAdjacentHTML('afterbegin', `
             <div class="card" id="tarefa-global-${novaTarefa.id}">
                 ${criarItemTarefa(novaTarefa).replace('<li', '<div').replace('</li>', '</div>')}
             </div>
         `);
 
-		form.reset();
-		alert('Tarefa adicionada com sucesso!');
-	} catch (error) {
-		alert(`Erro: ${error.message}`);
-	}
+        form.reset();
+        alert('Tarefa adicionada com sucesso!');
+    } catch (error) {
+        alert(`Erro: ${error.message}`);
+    }
 });
 
 document.addEventListener('DOMContentLoaded', () => {

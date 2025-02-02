@@ -242,15 +242,22 @@ form button:hover {
     background: #e3f2fd;
     padding: 4px 8px;
     border-radius: 12px;
-    font-weight: 500;
+    font-weight: bold;
+    color: #007bff;
 }
 
 .prazo-value.urgente {
-    .prazo-value.urgente {
     background: #ffebee;
     color: #d32f2f;
-    animation: pulse 1.5s infinite ease-in-out;
-	}
+    animation: pulse 1.5s infinite;
+}
+
+.responsavel-badge {
+    background-color: #e3f2fd;
+    color: #007bff;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: bold;
 }
 
 .projeto-info {

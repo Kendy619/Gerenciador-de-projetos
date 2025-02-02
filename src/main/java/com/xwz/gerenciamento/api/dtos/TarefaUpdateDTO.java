@@ -9,4 +9,5 @@ public class TarefaUpdateDTO {
 	 private Integer prazo;
 	 private String status;
 	 private String responsavel;
+	 private Long projectId;
 }

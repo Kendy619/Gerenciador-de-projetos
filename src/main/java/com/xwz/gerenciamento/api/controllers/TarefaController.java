@@ -28,28 +28,35 @@ public class TarefaController {
 
     @PostMapping
     public ResponseEntity<TarefaResponseDTO> createTarefa(@RequestBody TarefaDTO tarefaDTO) {
-    	try {
+        try {
             Projeto projeto = projetoService.getProjetoById(tarefaDTO.getProjetoId());
             if (projeto == null) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-	        Tarefa tarefa = new Tarefa();
-	        Tarefa novaTarefa = tarefaService.createTarefa(tarefa);
-	        TarefaResponseDTO responseDTO = new TarefaResponseDTO();
-	        
-	        responseDTO.setId(novaTarefa.getId());
-	        responseDTO.setTitulo(novaTarefa.getTitulo());
-	        responseDTO.setDescricao(novaTarefa.getDescricao());
-	        responseDTO.setPrazo(novaTarefa.getPrazo());
-	        responseDTO.setStatus(novaTarefa.getStatus());
-	        responseDTO.setResponsavel(novaTarefa.getResponsavel());
-	        responseDTO.setProjetoId(projeto.getId());
-	        
-	        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
-    	} catch (Exception e) {
-    		 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    	}
-    }	
+            Tarefa tarefa = new Tarefa();
+            tarefa.setTitulo(tarefaDTO.getTitulo());
+            tarefa.setDescricao(tarefaDTO.getDescricao());
+            tarefa.setPrazo(tarefaDTO.getPrazo());
+            tarefa.setStatus(Status.valueOf(tarefaDTO.getStatus()));
+            tarefa.setResponsavel(Responsavel.valueOf(tarefaDTO.getResponsavel()));
+            tarefa.setProjeto(projeto);
+
+            Tarefa novaTarefa = tarefaService.createTarefa(tarefa);
+
+            TarefaResponseDTO responseDTO = new TarefaResponseDTO();
+            responseDTO.setId(novaTarefa.getId());
+            responseDTO.setTitulo(novaTarefa.getTitulo());
+            responseDTO.setDescricao(novaTarefa.getDescricao());
+            responseDTO.setPrazo(novaTarefa.getPrazo());
+            responseDTO.setStatus(novaTarefa.getStatus());
+            responseDTO.setResponsavel(novaTarefa.getResponsavel());
+            responseDTO.setProjetoId(projeto.getId());
+
+            return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @GetMapping
     public ResponseEntity<List<Tarefa>> getAllTarefas(@RequestParam(required = false) Long projetoId) {
