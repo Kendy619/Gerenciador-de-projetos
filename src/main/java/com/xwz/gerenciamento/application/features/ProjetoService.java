@@ -43,6 +43,7 @@ public class ProjetoService {
         projetoExistente.setDataInicio(projetoDetails.getDataInicio());
         projetoExistente.setDataTermino(projetoDetails.getDataTermino());
         projetoExistente.setStatus(projetoDetails.getStatus());
+        projetoExistente.setEquipeResponsavel(projetoDetails.getEquipeResponsavel());
 
         return projetoRepository.save(projetoExistente);
     }

@@ -96,7 +96,7 @@ async function editProjeto(id) {
 				}
 				form.reset();
 				newSubmitBtn.textContent = 'Adicionar Projeto';
-				loadProjetos();
+				loadProjetosComTarefas();
 			} catch (error) {
 				alert(`Erro ao atualizar projeto: ${error.message}`);
 			}
@@ -157,7 +157,9 @@ async function updatedProjeto(event, id) {
 		if (!response.ok) {
 			throw new Error('Falha ao atualizar o projeto');
 		}
-
+		
+		const projetoAtualizado = await response.json();
+		
 		const projetoCard = document.querySelector(`.card[data-id="${id}"]`);
 		if (projetoCard) {
 			projetoCard.querySelector('h3').textContent = projetoAtualizado.nome;
