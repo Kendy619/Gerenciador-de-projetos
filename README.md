@@ -37,7 +37,7 @@ Uma aplicação completa para gestão de projetos e tarefas, desenvolvida com as
 git clone https://github.com/Kendy619/Gerenciador-de-projetos.git
 cd Gerenciador-de-projetos
 
-# 2. Configurar banco de dados
+# 2. Configurar banco de dados (OPCIONAL)
 mysql -u root -p -e "CREATE DATABASE sistema_projetos;"
 
 # 3. Iniciar aplicação
