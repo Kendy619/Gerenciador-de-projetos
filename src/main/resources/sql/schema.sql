@@ -117,7 +117,7 @@ VALUES
 INSERT INTO `sistema_projetos`.`tarefa` (`descricao`, `prazo`, `responsavel`, `status`, `titulo`, `projeto_id`) 
 VALUES
 ('Definir requisitos do sistema', 30, 'CTB', 'PLANEJADO', 'Requisitos Sistema', 1),
-('Desenvolver código de autenticação', 45, 'GBP', 'EM_EXECUCAO', 'Autenticação', 2),
+('Desenvolver código de autenticação', 45, 'GBP', 'EM_EXECUCAO', 'Autenticação', 1),
 ('Configuração de firewall', 20, 'GFU', 'FINALIZADO', 'Firewall Configuração', 3),
-('Realizar testes de usabilidade', 25, 'PLO', 'EM_EXECUCAO', 'Testes de Usabilidade', 4),
-('Documentação do projeto', 60, 'CTB', 'ABORTADO', 'Documentação do Sistema', 5);
+('Realizar testes de usabilidade', 25, 'PLO', 'EM_EXECUCAO', 'Testes de Usabilidade', 1),
+('Documentação do projeto', 60, 'CTB', 'ABORTADO', 'Documentação do Sistema', 3);
