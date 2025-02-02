@@ -213,7 +213,6 @@ async function editTarefa(id) {
 
         const tarefa = await response.json();
 
-        // Preencha o formulário de edição com os dados da tarefa
         const form = document.getElementById('tarefaForm');
         form.titulo.value = tarefa.titulo;
         form.descricao.value = tarefa.descricao;
@@ -223,34 +222,50 @@ async function editTarefa(id) {
         const submitBtn = document.getElementById('submitTarefa');
         submitBtn.textContent = 'Atualizar Tarefa';
 
-        // Substitua o evento de clique para enviar a atualização
         submitBtn.replaceWith(submitBtn.cloneNode(true));
         const newSubmitBtn = document.getElementById('submitTarefa');
 
         newSubmitBtn.addEventListener('click', async (event) => {
-            event.preventDefault();
-
-            const formData = new FormData(form);
-            const data = {
-                titulo: formData.get('titulo'),
-                descricao: formData.get('descricao'),
-                prazo: formData.get('prazo'),
-                status: formData.get('status'),
-            };
-
-            const updateResponse = await fetch(`${API_URL}/tarefas/${id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data),
-            });
-
-            if (!updateResponse.ok) {
-                throw new Error('Falha ao atualizar tarefa');
-            }
-
-            alert('Tarefa atualizada com sucesso!');
-			loadProjetosComTarefas();
-            loadTarefas(); 
+			try {
+	            event.preventDefault();
+	
+	            const formData = new FormData(form);
+	            const data = {
+	                titulo: formData.get('titulo'),
+	                descricao: formData.get('descricao'),
+	                prazo: formData.get('prazo'),
+	                status: formData.get('status'),
+					responsavel: formData.get('responsavel'),
+					projetoId: Number(formData.get('projetoId'))
+	            };
+	
+	            const updateResponse = await fetch(`${API_URL}/tarefas/${id}`, {
+	                method: 'PUT',
+	                headers: { 'Content-Type': 'application/json' },
+	                body: JSON.stringify(data),
+	            });
+	
+	            if (!updateResponse.ok) {
+	                throw new Error('Falha ao atualizar tarefa');
+	            }
+	
+	            alert('Tarefa atualizada com sucesso!');
+				form.reset();
+				
+				newSubmitBtn.textContent = 'Adicionar Tarefa';
+				
+				const resetSubmitBtn = newSubmitBtn.cloneNode(true);
+				newSubmitBtn.replaceWith(resetSubmitBtn);
+				
+				resetSubmitBtn.addEventListener('click', async ()=> {
+					document.getElementById('submitTarefa').click();
+				});
+				
+				loadProjetosComTarefas();
+	            loadTarefas(); 
+			} catch (error) {
+				 alert(`Erro: ${error.message}`);
+			}
         });
     } catch (error) {
         alert(`Erro ao editar tarefa: ${error.message}`);
@@ -408,19 +423,18 @@ document.getElementById('submitTarefa').addEventListener('click', async () => {
         if (!response.ok) throw new Error('Erro ao adicionar tarefa');
         
         const novaTarefa = await response.json();
-        
-        // Verificação de segurança
+
+		const projetoId = novaTarefa.projetoId;
+		
         if (!novaTarefa.projeto || !novaTarefa.projeto.id) {
             throw new Error('Projeto não encontrado na resposta da API');
         }
-
-        // Adiciona a tarefa no DOM
+		
         const projetoContainer = document.querySelector(`#projeto-${novaTarefa.projeto.id} .tarefas ul`);
         if (projetoContainer) {
             projetoContainer.insertAdjacentHTML('beforeend', criarItemTarefa(novaTarefa));
         }
 
-        // Atualiza a lista geral de tarefas
         const containerTarefas = document.getElementById('tarefasList');
         containerTarefas.insertAdjacentHTML('afterbegin', `
             <div class="card" id="tarefa-global-${novaTarefa.id}">
