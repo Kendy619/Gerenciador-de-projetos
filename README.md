@@ -38,22 +38,24 @@ git clone https://github.com/Kendy619/Gerenciador-de-projetos.git
 cd Gerenciador-de-projetos
 
 # 2. Configurar banco de dados
-mysql -u root -p -e "CREATE DATABASE gerenciamento_projetos;"
+mysql -u root -p -e "CREATE DATABASE sistema_projetos;"
 
 # 3. Iniciar aplicação
 mvn spring-boot:run
 ```
 
 
-🔍 Configuração Detalhada
 🔑 Configuração do Banco de Dados
-Edite src/main/resources/application.properties:
+Edite no diretório src/main/resources/application.properties:
 
 ```bash
-spring.datasource.url=jdbc:mysql://localhost:3306/gerenciamento_projetos
+spring.datasource.url=jdbc:mysql://localhost:3306/sistema_projetos
 spring.datasource.username=seu_usuario
 spring.datasource.password=sua_senha
 ```
+
+🔑 Observações importantes
+Ao inserir dados na tabela "tarefa", caso ocorra o erro 1452, basta alterar o campo projectId, pois a chave de algum dado está incorreta.
 
 🌐 Endpoints da API
 Projetos
