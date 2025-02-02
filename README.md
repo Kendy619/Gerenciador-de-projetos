@@ -56,7 +56,7 @@ spring.datasource.password=sua_senha
 
 ## 🔑 Observações importantes
 
-Ao inserir dados na tabela "tarefa", caso ocorra o erro 1452, basta alterar o campo projectId, pois a chave de algum dado está incorreta.
+Ao inserir dados na tabela "tarefa", caso ocorra o erro 1452, basta alterar o campo projeto_id, pois a chave de algum dado está incorreta.
 
 🌐 Endpoints da API
 Projetos
