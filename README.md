@@ -98,4 +98,4 @@ Acesse a interface intuitiva em http://localhost:8080
 
 Kendy Ferreira
 
-[Linkedin](www.linkedin.com/in/kendy-ferreira-de-oliveira-1a51b1163)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/kendy-ferreira-de-oliveira-1a51b1163/)
